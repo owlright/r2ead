@@ -60,13 +60,7 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
 
 // 定义结构体对象的构造函数
 class Book {
-    bookName: string;
-    chapterTitle: string;
-
-    constructor(bookName: string, chapterTitle: string) {
-        this.bookName = bookName;
-        this.chapterTitle = chapterTitle;
-    }
+    constructor(public bookName: string, public chapterTitle: string) {}
 }
 
 const Titlebar = () => {
