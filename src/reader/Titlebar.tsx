@@ -8,7 +8,7 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
         // Programmatically click the file input when the button is clicked
         console.log("点击了按钮");
         fileInput.current?.click();
-      };
+    };
 
     const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files ? event.target.files[0] : null;
@@ -16,7 +16,6 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
         if (selectedFile) {
             const reader = new FileReader();
             console.log("选择的文件:", selectedFile);
-
             const book = ePub();
             reader.readAsArrayBuffer(selectedFile);
             reader.onload = (event) => {
