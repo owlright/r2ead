@@ -1,7 +1,9 @@
-import { useRef, useState, ChangeEvent } from "react";
+import { useRef, useState, ChangeEvent, useContext } from "react";
 import ePub from "epubjs"; // Import the ePub library
+import GLOBAL from "../global";
 
 const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
+    const { setEpub } = useContext(GLOBAL);
     // To trigger the file input dialog when the button is clicked, you can use a reference to the file input element and programmatically click it when the button is clicked. Here's how you can do it using React's useRef hook:
     const fileInput = useRef<HTMLInputElement>(null);
     const handleButtonClick = (_event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +30,7 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
             book.ready.then(async () => {
                 const arr = await book.loaded.metadata; // Access the metadata property of the book object
                 const bookName = arr.title;
+                setEpub(book);
                 setBook(new Book(bookName, "章节名"));
             });
             book.renderTo("viewer", {
@@ -59,13 +62,14 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
 
 // 定义结构体对象的构造函数
 class Book {
-    constructor(public bookName: string, public chapterTitle: string) {}
+    constructor(public bookName: string, public chapterTitle: string) { }
 }
 
 const Titlebar = () => {
     const [book, setBook] = useState(new Book("书名", "章节名"));
 
     return (
+
         <div id="titlebar">
             <div id="opener">
                 <button id="silder" className="icon-menu"></button>
@@ -93,6 +97,7 @@ const Titlebar = () => {
                 </button>
             </div>
         </div>
+
     );
 };
 export default Titlebar;

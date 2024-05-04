@@ -2,7 +2,6 @@
 import "./Main.css";
 import Sidebar from "./reader/Sidebar";
 import Titlebar from "./reader/Titlebar";
-
 function Main() {
     return (
         <div id="main">
