@@ -1,8 +1,8 @@
 import { useRef, useState, ChangeEvent, useContext } from "react";
-import ePub from "epubjs"; // Import the ePub library
+import {Book} from "epubjs"; // Import the ePub library
 import GLOBAL from "../global";
 
-const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
+function FilePicker({ setBook }: { setBook: (book: BookInfo) => void }) {
     const { setEpub } = useContext(GLOBAL);
     // To trigger the file input dialog when the button is clicked, you can use a reference to the file input element and programmatically click it when the button is clicked. Here's how you can do it using React's useRef hook:
     const fileInput = useRef<HTMLInputElement>(null);
@@ -18,7 +18,7 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
         if (selectedFile) {
             const reader = new FileReader();
             console.log("选择的文件:", selectedFile);
-            const book = ePub();
+            const book = new Book();
             reader.readAsArrayBuffer(selectedFile);
             reader.onload = (event) => {
                 const bookData = event.target!.result as ArrayBuffer;
@@ -31,7 +31,7 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
                 const arr = await book.loaded.metadata; // Access the metadata property of the book object
                 const bookName = arr.title;
                 setEpub(book);
-                setBook(new Book(bookName, "章节名"));
+                setBook(new BookInfo(bookName, "章节名"));
             });
             book.renderTo("viewer", {
                 ignoreClass: "annotator-hl",
@@ -61,12 +61,12 @@ const FilePicker = ({ setBook }: { setBook: (book: Book) => void }) => {
 };
 
 // 定义结构体对象的构造函数
-class Book {
+class BookInfo {
     constructor(public bookName: string, public chapterTitle: string) { }
 }
 
-const Titlebar = () => {
-    const [book, setBook] = useState(new Book("书名", "章节名"));
+export default function Titlebar() {
+    const [book, setBook] = useState(new BookInfo("书名", "章节名"));
 
     return (
 
@@ -100,4 +100,3 @@ const Titlebar = () => {
 
     );
 };
-export default Titlebar;
