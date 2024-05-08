@@ -1,9 +1,9 @@
 import { useRef, useState, ChangeEvent, useContext } from "react";
 import {Book} from "epubjs"; // Import the ePub library
-import GLOBAL from "../global";
+import { EpubContext } from "../global";
 
 function FilePicker({ setBook }: { setBook: (book: BookInfo) => void }) {
-    const { setEpub } = useContext(GLOBAL);
+    const { setEpub } = useContext(EpubContext);
     // To trigger the file input dialog when the button is clicked, you can use a reference to the file input element and programmatically click it when the button is clicked. Here's how you can do it using React's useRef hook:
     const fileInput = useRef<HTMLInputElement>(null);
     const handleButtonClick = (_event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,36 +67,36 @@ class BookInfo {
 
 export default function Titlebar() {
     const [book, setBook] = useState(new BookInfo("书名", "章节名"));
-
+    const [ epb, setEpub ] = useState(new Book());
     return (
+        <EpubContext.Provider value={{epub: epb, setEpub: setEpub}}>
+            <div id="titlebar">
+                <div id="opener">
+                    <button id="silder" className="icon-menu"></button>
+                </div>
 
-        <div id="titlebar">
-            <div id="opener">
-                <button id="silder" className="icon-menu"></button>
+                <div id="metainfo">
+                    <span id="book-title">{book.bookName}</span>
+                    <span id="title-seperator" style={{ display: "inline" }}>
+                        &nbsp;&nbsp;–&nbsp;&nbsp;
+                    </span>
+                    <span id="chapter-title">{book.chapterTitle}</span>
+                </div>
+
+                <div id="title-controls">
+                    <FilePicker setBook={setBook} />
+                    {/* <button id="openfile" className="icon-download-cloud" onClick={handleHrefClick}><FilePicker /></button> */}
+                    <button id="bookmark" className="icon-bookmark-empty">
+                        Bookmark
+                    </button>
+                    <button id="setting" className="icon-cog">
+                        Settings
+                    </button>
+                    <button id="fullscreen" className="icon-resize-full">
+                        Fullscreen
+                    </button>
+                </div>
             </div>
-
-            <div id="metainfo">
-                <span id="book-title">{book.bookName}</span>
-                <span id="title-seperator" style={{ display: "inline" }}>
-                    &nbsp;&nbsp;–&nbsp;&nbsp;
-                </span>
-                <span id="chapter-title">{book.chapterTitle}</span>
-            </div>
-
-            <div id="title-controls">
-                <FilePicker setBook={setBook} />
-                {/* <button id="openfile" className="icon-download-cloud" onClick={handleHrefClick}><FilePicker /></button> */}
-                <button id="bookmark" className="icon-bookmark-empty">
-                    Bookmark
-                </button>
-                <button id="setting" className="icon-cog">
-                    Settings
-                </button>
-                <button id="fullscreen" className="icon-resize-full">
-                    Fullscreen
-                </button>
-            </div>
-        </div>
-
+        </EpubContext.Provider>
     );
 };

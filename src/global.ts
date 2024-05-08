@@ -1,6 +1,4 @@
-import React from "react";
-import Book from "epubjs";
-import { useState } from "react";
-const [epub, setEpub] = useState(Book());
-const GLOBAL = React.createContext({ epub, setEpub });
-export default GLOBAL;
+import { createContext } from 'react';
+import {Book} from "epubjs";
+
+export const EpubContext = createContext({epub: new Book(), setEpub:(_: Book)=>{}});
