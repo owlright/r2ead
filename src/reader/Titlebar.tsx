@@ -37,7 +37,7 @@ function FilePicker({ setBook }: { setBook: (book: BookInfo) => void }) {
                 ignoreClass: "annotator-hl",
                 width: "100%",
                 height: "100%",
-            });
+            }).display();
         } else {
             console.log("用户取消了选择");
         }
