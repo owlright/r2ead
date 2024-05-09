@@ -1,9 +1,10 @@
 import { useRef, useState, ChangeEvent, useContext } from "react";
-import {Book} from "epubjs"; // Import the ePub library
-import { EpubContext } from "../global";
+import { Book, Rendition } from "epubjs"; // Import the ePub library
+import { EpubContext, RenderContext } from "../global";
 
 function FilePicker({ setBook }: { setBook: (book: BookInfo) => void }) {
     const { setEpub } = useContext(EpubContext);
+    const { setRendition } = useContext(RenderContext);
     // To trigger the file input dialog when the button is clicked, you can use a reference to the file input element and programmatically click it when the button is clicked. Here's how you can do it using React's useRef hook:
     const fileInput = useRef<HTMLInputElement>(null);
     const handleButtonClick = (_event: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,26 +19,26 @@ function FilePicker({ setBook }: { setBook: (book: BookInfo) => void }) {
         if (selectedFile) {
             const reader = new FileReader();
             console.log("选择的文件:", selectedFile);
-            const book = new Book();
+            let book = new Book();
             reader.readAsArrayBuffer(selectedFile);
             reader.onload = (event) => {
                 const bookData = event.target!.result as ArrayBuffer;
-                const ebook = book.open(bookData);
-                ebook.then((book) => {
-                    console.log(book);
-                });
+                book.open(bookData);
             };
             book.ready.then(async () => {
-                const arr = await book.loaded.metadata; // Access the metadata property of the book object
-                const bookName = arr.title;
+                let arr = await book.loaded.metadata; // Access the metadata property of the book object
+                let bookName = arr.title;
                 setEpub(book);
                 setBook(new BookInfo(bookName, "章节名"));
+                let rendition = book.renderTo("viewer", {
+                    ignoreClass: "annotator-hl",
+                    width: "100%",
+                    height: "100%",
+                })
+                setRendition(rendition);
+                rendition.display();
             });
-            book.renderTo("viewer", {
-                ignoreClass: "annotator-hl",
-                width: "100%",
-                height: "100%",
-            }).display();
+
         } else {
             console.log("用户取消了选择");
         }
@@ -67,9 +68,11 @@ class BookInfo {
 
 export default function Titlebar() {
     const [book, setBook] = useState(new BookInfo("书名", "章节名"));
-    const [ epb, setEpub ] = useState(new Book());
+    const [epb, setEpub] = useState(new Book());
+    const [rendition, setRendition] = useState(new Rendition(new Book(), {}));
     return (
-        <EpubContext.Provider value={{epub: epb, setEpub: setEpub}}>
+        <EpubContext.Provider value={{ epub: epb, setEpub: setEpub }}>
+        <RenderContext.Provider value={{ rendition: rendition, setRendition: setRendition }}>
             <div id="titlebar">
                 <div id="opener">
                     <button id="silder" className="icon-menu"></button>
@@ -97,6 +100,7 @@ export default function Titlebar() {
                     </button>
                 </div>
             </div>
+        </RenderContext.Provider>
         </EpubContext.Provider>
     );
 };
