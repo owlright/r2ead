@@ -1,5 +1,12 @@
-import { createContext } from 'react';
-import {Book, Rendition} from "epubjs";
+import {  Rendition } from "epubjs";
 
-export const EpubContext = createContext({epub: new Book(), setEpub:(_: Book)=>{}});
-export const RenderContext = createContext({rendition: new Rendition(new Book(), {}), setRendition:(_: Rendition)=>{}});
+export interface ReaderProps {
+    url: string;
+    title: string;
+    location: string | number;
+    locationChanged: (loc: string) => void;
+    getRendition: (_rendition: Rendition) => void;
+}
+
+export type SetReaderProps = React.Dispatch<React.SetStateAction<ReaderProps>>;
+
