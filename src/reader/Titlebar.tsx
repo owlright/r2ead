@@ -42,19 +42,23 @@ function FilePicker({ setReaderProps }: { setReaderProps: SetReaderProps }) {
     };
 
     return (
-        <button
-            id="openfile"
-            className="icon-download-cloud"
-            onClick={handleButtonClick}
-        >
-            <span>打开书籍</span>
+        <div>
+            <button
+                id="openfile"
+                className="icon-download-cloud"
+                onClick={handleButtonClick}
+            >
+                <span>打开书籍</span>
+
+            </button>
             <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={handleFileSelect}
-                ref={fileInput}
-            />
-        </button>
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={handleFileSelect}
+                    ref={fileInput}
+                />
+        </div>
+
     );
 };
 
@@ -76,7 +80,7 @@ export default function Titlebar(props: ReaderProps & {
                 <span id="chapter-title">{"TODO"}</span>
             </div>
 
-            <div id="title-controls">
+            <div id="title-controls" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <FilePicker setReaderProps={props.setReaderProps} />
                 {/* <button id="openfile" className="icon-download-cloud"
                 onClick={handleHrefClick}><FilePicker /></button> */}
