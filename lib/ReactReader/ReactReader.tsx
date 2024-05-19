@@ -1,10 +1,11 @@
-import React, { type CSSProperties, PureComponent, type ReactNode } from 'react'
+import React, { PureComponent, type ReactNode } from 'react'
 import { type SwipeableProps, useSwipeable } from 'react-swipeable'
 import { EpubView, type IEpubViewStyle, type IEpubViewProps } from '..'
 import {
     ReactReaderStyle as defaultStyles,
     type IReactReaderStyle,
 } from './style'
+import { TocItem } from './TocItem'
 import { type NavItem } from 'epubjs'
 
 type SwipeWrapperProps = {
@@ -16,32 +17,6 @@ const SwipeWrapper = ({ children, swipeProps }: SwipeWrapperProps) => {
     const handlers = useSwipeable(swipeProps)
     return <div {...handlers}>{children}</div>
 }
-
-type TocItemProps = {
-    data: NavItem
-    setLocation: (value: string) => void
-    styles?: CSSProperties
-}
-
-const TocItem = ({ data, setLocation, styles }: TocItemProps) => (
-    <div>
-        <button onClick={() => setLocation(data.href)} style={styles}>
-            {data.label}
-        </button>
-        {data.subitems && data.subitems.length > 0 && (
-            <div style={{ paddingLeft: 10 }}>
-                {data.subitems.map((item, i) => (
-                    <TocItem
-                        key={i}
-                        data={item}
-                        styles={styles}
-                        setLocation={setLocation}
-                    />
-                ))}
-            </div>
-        )}
-    </div>
-)
 
 export type IReactReaderProps = IEpubViewProps & {
     title?: string
