@@ -1,7 +1,7 @@
 import { useRef, useState, ChangeEvent } from "react";
 import { Book} from "epubjs"; // Import the ePub library
 import { ReaderProps, type SetReaderProps } from "../global";
-
+import {TocComponent} from "../../lib/index";
 
 function FilePicker({ setReaderProps }: { setReaderProps: SetReaderProps }) {
 
@@ -69,7 +69,7 @@ export default function Titlebar(props: ReaderProps & {
     return (
         <div id="titlebar">
             <div id="opener">
-                <button id="silder" className="icon-menu"></button>
+                <TocComponent/>
             </div>
 
             <div id="metainfo">
